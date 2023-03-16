@@ -88,4 +88,6 @@ def registerOracle(request):
 @api_view(['GET'])
 def logoutUser(request):
     logout(request)
-    return redirect('login')
+    return Response({
+        "success" : "true"
+    })
