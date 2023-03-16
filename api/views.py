@@ -43,15 +43,26 @@ class MedicineList(APIView):
         serializer = MedicineSerializer(medicines, many=True)
         return Response(serializer.data)
     def post(self, request):
-        medicine = Medicine.objects.create(
-            type=request.data['type'],
-            name=request.data['name'],
-            price=request.data['price'],
-            therauptic_category=request.data['therauptic_category'],
-            disease=request.data['disease'],
-            description=request.data['description'],
-        )
-        return redirect('medicine-detail', medicine.id)
+        try:
+            medicine = Medicine.objects.create(
+                name = request.data['name'],
+                image = request.data['image'],
+                description = request.data['description'],
+                price = request.data['price'],
+                manufacturer = request.data['manufacturer'],
+                type = request.data['type'],
+                quantity = request.data['quantity'],
+                dosage = request.data['dosage'],
+                substance = request.data['substance'],
+                therauptic_category = request.data['therauptic_category'],
+                disease = request.data['disease']
+            )
+            return Response({"success" : "true"})
+        except Exception as e:
+            return Response({
+                "success" : "false",
+                "error" : str(e)
+            })
 
 
 class MedicineDetail(APIView):
@@ -66,7 +77,7 @@ class MedicineDetail(APIView):
         return Response(serializer.data)
     def post(self, request, id):
         medicine = self.get_object(id)
-        update(medicine, request.data)
+        print(request.data)
         medicine.save()
         return Response({"success" : "true"})
     def delete(self, request, id):

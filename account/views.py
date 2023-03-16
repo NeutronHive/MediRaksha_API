@@ -11,41 +11,57 @@ from django.contrib.auth.decorators import login_required
 from .models import Account
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
 # Create your views here.
 
 @api_view(['POST'])
 def loginUser(request):
-    username = request.data['username']
-    password = request.data['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
+    try:
+        username = request.data['username']
+        password = request.data['password']
+        user = authenticate(request, username=username, password=password)
         login(request, user)
         return Response({"success" : "true"})
-    else:
-        return Response({"success" : "false"})
+    except Exception as e:
+        return Response({
+                "success" : "false",
+                "error" : str(e)
+            })
     
 @api_view(['GET'])
 def userData(request):
-    account = request.user.account
-    data = {
-        'username' : str(request.user),
-        'type' : str(account.type),
-    }
-    return Response(data)
+    try:
+        account = request.user.account
+        data = {
+            'username' : str(request.user),
+            'email' : str(request.user.email),
+            'type' : str(account.type),
+            'address' : str(account.address)
+        }
+        return Response(data)
+    except Exception as e:
+        return Response({
+            "success" : "false",
+            "error" : str(e)
+        })
 
 @api_view(['POST'])
 def registerUser(request):
-    user_form = UserCreationForm(request.POST)
-    print(user_form)
-    if user_form.is_valid():
-        user = user_form.save(commit=False)
-        user.email = request.POST.get('email')
-        account = Account(user=user)
+    try:
+        print(request.data)
+        username = request.data['username']
+        email = request.data['email']
+        password = request.data['password']
+        user = User.objects.create_user(username, password, email)
         user.save()
-        account.save()
-        login(request, user)
-        return redirect('profile-update')
-    return Response({"success" : "true"})
+        return Response({"success" : "true"})
+    except Exception as e:
+        return Response(
+            {
+                "success" : "false",
+                "error" : str(e)
+            }
+        )
 
 @api_view(['GET'])
 def logoutUser(request):
