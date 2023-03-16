@@ -98,6 +98,9 @@ class MedicineDetail(APIView):
     def post(self, request, id):
         try:
             medicine = self.get_object(id)
+            fields = ['name', 'image', 'price', 'manufacturer', 'type', 'quantity', 'dosage', 'substance', 'therauptic_category', 'disease']
+            for field in fields:
+                setattr(medicine, field, request.data[field])
             medicine.save()
             return Response({"success" : "true"})
         except Exception as e:
