@@ -6,4 +6,5 @@ urlpatterns = [
     path('get-user/', views.userData, name='user-data'),
     path('logout/', views.logoutUser, name='logout'),
     path('register/', views.registerUser, name='register'),
+    path('oracle-register/', views.registerOracle, name='register-oracle'),
 ]

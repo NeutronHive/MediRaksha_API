@@ -36,6 +36,10 @@ def getEndpoints(request):
         {
             'url' : 'register/',
             'methods' : ['POST']
+        },
+        {
+            'url' : 'oracle-register/',
+            'methods' : ['POST']
         }
     ]
     return Response(routes)

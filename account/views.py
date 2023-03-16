@@ -48,7 +48,6 @@ def userData(request):
 @api_view(['POST'])
 def registerUser(request):
     try:
-        print(request.data)
         username = request.data['username']
         email = request.data['email']
         password = request.data['password']
@@ -64,6 +63,27 @@ def registerUser(request):
                 "error" : str(e)
             }
         )
+
+@api_view(['POST'])
+def registerOracle(request):
+    try:
+        username = request.data['username']
+        email = request.data['email']
+        password = request.data['password']
+        address = request.data['address']
+        user = User.objects.create_user(username=username, password=password, email=email)
+        user.save()
+        account = Account(user=user, type="oracle", address=address)
+        account.save()
+        return Response({"success" : "true"})
+    except Exception as e:
+        return Response(
+            {
+                "success" : "false",
+                "error" : str(e)
+            }
+        )
+
 
 @api_view(['GET'])
 def logoutUser(request):
