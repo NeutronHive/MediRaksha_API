@@ -6,7 +6,8 @@ from medicine.models import Medicine
 from medicine.serializers import MedicineSerializer
 from django.db.models import Q
 from rest_framework.views import APIView
-
+from web3 import Web3
+from blockchain import utils
 # Create your views here.
 
 
@@ -46,6 +47,8 @@ def getEndpoints(request):
 
 
 
+cur = 0
+
 class MedicineList(APIView):
     def get(self, request):
         try:
@@ -73,8 +76,23 @@ class MedicineList(APIView):
                 dosage = request.data['dosage'],
                 substance = request.data['substance'],
                 therauptic_category = request.data['therauptic_category'],
-                disease = request.data['disease']
+                disease = request.data['disease'],
+                raksha_value = 0,
+                ballot_num=0
             )
+
+            global cur
+
+            # Writing values into blockchain
+            try:
+                utils.createBallotContract()
+                utils.mfStoreMedicine(medicine.id, medicine.name, medicine.description, int(float(medicine.price)), int(float(medicine.dosage)), medicine.manufacturer,medicine.type, cur)
+            except Exception as e:
+                print(e)
+            medicine.ballot_num = cur
+            medicine.save()
+            cur += 1
+
             return Response({"success" : "true"})
         except Exception as e:
             return Response({

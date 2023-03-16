@@ -14,4 +14,6 @@ class Medicine(models.Model):
     substance = models.CharField(max_length=100, null=True, blank=True)
     therauptic_category = models.CharField(max_length=200, blank=True, null=True)
     disease = models.CharField(max_length=200, blank=True, null=True)
+    ballot_num = models.IntegerField(default=0)
+    raksha_value = models.IntegerField(default=0)
     
