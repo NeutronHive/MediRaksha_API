@@ -7,7 +7,7 @@ from medicine.serializers import MedicineSerializer
 from django.db.models import Q
 from rest_framework.views import APIView
 from web3 import Web3
-from blockchain import utils
+# from blockchain import utils
 # Create your views here.
 
 
@@ -84,11 +84,11 @@ class MedicineList(APIView):
             global cur
 
             # Writing values into blockchain
-            try:
-                utils.createBallotContract()
-                utils.mfStoreMedicine(medicine.id, medicine.name, medicine.description, int(float(medicine.price)), int(float(medicine.dosage)), medicine.manufacturer,medicine.type, cur)
-            except Exception as e:
-                print(e)
+            # try:
+            #     utils.createBallotContract()
+            #     utils.mfStoreMedicine(medicine.id, medicine.name, medicine.description, int(float(medicine.price)), int(float(medicine.dosage)), medicine.manufacturer,medicine.type, cur)
+            # except Exception as e:
+            #     print(e)
             medicine.ballot_num = cur
             medicine.save()
             cur += 1
