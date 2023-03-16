@@ -10,12 +10,13 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import Account
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.hashers import make_password
 # Create your views here.
 
 @api_view(['POST'])
 def loginUser(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
+    username = request.data['username']
+    password = request.data['password']
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
