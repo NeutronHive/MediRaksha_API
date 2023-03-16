@@ -14,13 +14,29 @@ from rest_framework.views import APIView
 def getEndpoints(request):
     routes = [
         {
-            'url' : 'api/medicines',
-            'methods' : ['GET', 'POST']
+            'url' : 'api/medicines/',
+            'methods' : ['GET', 'POST'],
         },
         {
-            'url' : 'api/medicine/:id',
+            'url' : 'api/medicine/:id/',
             'methods' : ['GET', 'PUT', 'DELETE']
         },
+        {
+            'url' : 'login/',
+            'methods' : ['POST']
+        },
+        {
+            'url' : 'logout/',
+            'methods' : ['GET']
+        },
+        {
+            'url' : 'get-user/',
+            'methods' : ['GET']
+        },
+        {
+            'url' : 'register/',
+            'methods' : ['POST']
+        }
     ]
     return Response(routes)
 

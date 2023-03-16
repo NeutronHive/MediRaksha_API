@@ -54,6 +54,8 @@ def registerUser(request):
         password = request.data['password']
         user = User.objects.create_user(username=username, password=password, email=email)
         user.save()
+        account = Account(user=user, type="user", address="")
+        account.save()
         return Response({"success" : "true"})
     except Exception as e:
         return Response(
