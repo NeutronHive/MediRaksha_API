@@ -52,7 +52,7 @@ def registerUser(request):
         username = request.data['username']
         email = request.data['email']
         password = request.data['password']
-        user = User.objects.create_user(username, password, email)
+        user = User.objects.create_user(username=username, password=password, email=email)
         user.save()
         return Response({"success" : "true"})
     except Exception as e:

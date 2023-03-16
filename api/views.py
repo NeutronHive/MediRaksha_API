@@ -9,14 +9,6 @@ from rest_framework.views import APIView
 
 # Create your views here.
 
-def update(medicine, data):
-    medicine.type=data['type'],
-    medicine.name=data['name'],
-    # medicine.price=float(data['price']),
-    medicine.therauptic_category=data['therauptic_category'],
-    medicine.disease=data['disease'],
-    medicine.description=data['description']
-
 
 @api_view(['GET'])
 def getEndpoints(request):
@@ -36,12 +28,18 @@ def getEndpoints(request):
 
 class MedicineList(APIView):
     def get(self, request):
-        query = request.GET.get('query')
-        if query == None:
-            query = ''
-        medicines = Medicine.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
-        serializer = MedicineSerializer(medicines, many=True)
-        return Response(serializer.data)
+        try:
+            query = request.GET.get('query')
+            if query == None:
+                query = ''
+            medicines = Medicine.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+            serializer = MedicineSerializer(medicines, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({
+                "success" : "false",
+                "error" : str(e)
+            })
     def post(self, request):
         try:
             medicine = Medicine.objects.create(
@@ -72,15 +70,32 @@ class MedicineDetail(APIView):
         except Medicine.DoesNotExist:
             return Http404
     def get(self, request, id):
-        medicine = self.get_object(id)
-        serializer = MedicineSerializer(medicine, many=False)
-        return Response(serializer.data)
+        try:
+            medicine = self.get_object(id)
+            serializer = MedicineSerializer(medicine, many=False)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({
+                "success" : "false",
+                "error" : str(e)
+            })
     def post(self, request, id):
-        medicine = self.get_object(id)
-        print(request.data)
-        medicine.save()
-        return Response({"success" : "true"})
+        try:
+            medicine = self.get_object(id)
+            medicine.save()
+            return Response({"success" : "true"})
+        except Exception as e:
+            return Response({
+                "success" : "false",
+                "error" : str(e)
+            })
     def delete(self, request, id):
-        medicine = self.get_object(id)
-        medicine.delete()
-        return Response({"success" : "true"})
+        try:
+            medicine = self.get_object(id)
+            medicine.delete()
+            return Response({"success" : "true"})
+        except Exception as e:
+            return Response({
+                "success" : "false",
+                "error" : str(e)
+            })
