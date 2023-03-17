@@ -41,6 +41,10 @@ def getEndpoints(request):
         {
             'url' : 'oracle-register/',
             'methods' : ['POST']
+        },
+        {
+            'url' : 'vote/',
+            'methods' : ['POST']
         }
     ]
     return Response(routes)
@@ -140,3 +144,19 @@ class MedicineDetail(APIView):
                 "success" : "false",
                 "error" : str(e)
             })
+
+@api_view(['POST'])
+def giveVote(request):
+    try:
+        no_oracle = 13
+        id = request.data['id']
+        vote = request.data['vote']
+        medicine = Medicine.objects.get(id=id)
+        medicine.raksha_value += vote // no_oracle
+        medicine.save()
+        return Response({"success" : "true"})
+    except Exception as e:
+        return Response({
+            "success" : "false",
+            "error" : str(e)
+        })
