@@ -1,4 +1,4 @@
 git add --a
 git commit -m"Hosting"
-cat ~/PAT
+cat ~/Desktop/PAT
 git push
